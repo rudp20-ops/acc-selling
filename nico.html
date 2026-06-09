@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nico x JiWong | Bedwars Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+/* ── CONFIG ─────────────────────────────────────────────────── */
+/* PASTE YOUR DISCORD WEBHOOK URL BELOW                          */
+/* ──────────────────────────────────────────────────────────── */
+
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --purple:#a080ff;--purple-dark:#6040c0;--purple-bg:rgba(100,60,200,0.15);
+  --gold:#ffbe30;--gold-dark:#c08000;--gold-bg:rgba(200,140,0,0.15);
+  --plat:#40d0ff;--plat-dark:#0080c0;--plat-bg:rgba(0,160,220,0.15);
+  --bg:#0a0d14;--surface:#12101e;--text:#e8eaf0;--muted:rgba(200,200,230,0.55);
+  --border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* STARS */
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:drift linear infinite;}
+@keyframes drift{0%{opacity:0;transform:translateY(0)}10%{opacity:1}90%{opacity:.8}100%{opacity:0;transform:translateY(-100vh)}}
+
+/* LAYOUT */
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 20px 80px;}
+
+/* HERO */
+.hero{text-align:center;padding:70px 20px 50px;animation:slideDown .8s ease both;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-28px)}to{opacity:1;transform:translateY(0)}}
+.hero-badge{display:inline-block;background:rgba(80,50,160,0.25);border:1px solid rgba(140,100,255,0.35);border-radius:20px;padding:6px 20px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:22px;animation:pulse 2.5s infinite;}
+@keyframes pulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+.hero-title{font-family:'Orbitron',monospace;font-size:clamp(30px,6vw,58px);font-weight:900;background:linear-gradient(135deg,#fff 0%,#b090ff 40%,#60c8ff 75%,#fff 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite;line-height:1.1;margin-bottom:10px;}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+.hero-sub{font-size:15px;color:var(--muted);letter-spacing:1px;margin-bottom:28px;}
+.hero-pills{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:12px;padding:7px 18px;font-size:13px;color:var(--muted);}
+.pill strong{color:var(--purple);}
+
+/* DIVIDER */
+.divider{text-align:center;margin:10px 0 44px;}
+.divider-line{height:1px;background:linear-gradient(90deg,transparent,rgba(120,80,255,.45),transparent);max-width:600px;margin:0 auto 14px;}
+.divider-label{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:4px;color:rgba(160,128,255,.55);text-transform:uppercase;}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-bottom:60px;}
+.card{border-radius:22px;padding:32px 26px;position:relative;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(30px);transition:transform .35s ease,box-shadow .35s ease;border:1.5px solid transparent;}
+.card.show{animation:riseIn .55s ease forwards;}
+@keyframes riseIn{to{opacity:1;transform:translateY(0)}}
+.card:hover{transform:translateY(-10px) scale(1.02);}
+
+.card-lvl20{background:linear-gradient(145deg,#12101e,#1a1530);border-color:rgba(120,80,220,.3);animation-delay:.08s;}
+.card-lvl20:hover{box-shadow:0 0 40px rgba(160,128,255,.35);}
+.card-gold{background:linear-gradient(145deg,#1a1200,#251a00);border-color:rgba(220,160,0,.3);animation-delay:.22s;}
+.card-gold:hover{box-shadow:0 0 40px rgba(255,190,50,.35);}
+.card-plat{background:linear-gradient(145deg,#001820,#002230);border-color:rgba(0,180,240,.3);animation-delay:.38s;}
+.card-plat:hover{box-shadow:0 0 40px rgba(64,208,255,.35);}
+
+/* RIBBON */
+.ribbon{position:absolute;top:20px;right:-30px;background:linear-gradient(135deg,#ffb820,#e07000);color:#1a0e00;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 44px;transform:rotate(35deg);z-index:2;}
+
+/* CARD CONTENT */
+.card-icon{width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px;}
+.icon-lvl20{background:rgba(100,60,200,.2);border:1px solid rgba(120,80,220,.3);}
+.icon-gold{background:rgba(200,140,0,.2);border:1px solid rgba(220,160,0,.3);}
+.icon-plat{background:rgba(0,160,220,.2);border:1px solid rgba(0,180,240,.3);}
+
+.card-name{font-family:'Orbitron',monospace;font-size:19px;font-weight:700;margin-bottom:3px;}
+.c-purple{color:var(--purple);}
+.c-gold{color:var(--gold);}
+.c-plat{color:var(--plat);}
+.card-sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.45;margin-bottom:20px;}
+
+.feats{list-style:none;margin-bottom:22px;}
+.feats li{font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px;color:rgba(210,210,230,.85);}
+.feats li:last-child{border-bottom:none;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-p{background:var(--purple);}
+.dot-g{background:var(--gold);}
+.dot-pl{background:var(--plat);}
+
+.price-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:4px;}
+.price-num{font-family:'Orbitron',monospace;font-size:34px;font-weight:900;line-height:1;}
+.price-unit{font-size:13px;opacity:.55;margin-top:4px;}
+.price-alt{font-size:11px;opacity:.4;margin-top:5px;margin-bottom:20px;}
+
+.btn{width:100%;padding:13px;border-radius:13px;border:none;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .2s;position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.14) 0%,transparent 60%);opacity:0;transition:opacity .2s;}
+.btn:hover::after{opacity:1;}
+.btn:active{transform:scale(.97);}
+.btn-p{background:linear-gradient(135deg,#6040c0,#4020a0);color:#e0d0ff;}
+.btn-g{background:linear-gradient(135deg,#c08000,#a06000);color:#fff8e0;}
+.btn-pl{background:linear-gradient(135deg,#0080c0,#005090);color:#d0f4ff;}
+
+/* REVIEWS */
+.reviews-section{margin-bottom:60px;}
+.section-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--purple);text-align:center;margin-bottom:28px;letter-spacing:2px;}
+.reviews{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+.review{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:20px 22px;}
+.rev-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.rev-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.rev-name{font-size:14px;font-weight:600;color:var(--text);}
+.rev-tier{font-size:11px;letter-spacing:1px;opacity:.5;text-transform:uppercase;}
+.rev-stars{color:var(--gold);font-size:13px;margin-bottom:8px;letter-spacing:1px;}
+.rev-text{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* TRUST */
+.trust{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-bottom:50px;}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
+.ti{color:rgba(160,128,255,.7);}
+
+/* NOTICE */
+.notice{background:rgba(60,40,120,.12);border:1px solid rgba(100,70,200,.2);border-radius:14px;padding:18px 24px;display:flex;gap:14px;align-items:flex-start;margin-bottom:50px;}
+.notice-text{font-size:13px;color:rgba(200,185,255,.65);line-height:1.7;}
+.notice-text strong{color:rgba(200,185,255,.9);}
+
+/* FOOTER */
+footer{text-align:center;border-top:1px solid var(--border);padding:26px 20px;font-size:11px;color:rgba(160,160,200,.3);letter-spacing:1px;}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.overlay.open{display:flex;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#12101e;border:1px solid rgba(140,100,255,.35);border-radius:24px;padding:38px 34px;max-width:480px;width:92%;position:relative;animation:popIn .3s ease;}
+@keyframes popIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(200,200,240,.4);font-size:22px;cursor:pointer;line-height:1;transition:color .2s;}
+.modal-close:hover{color:rgba(200,200,240,.9);}
+.modal-emoji{font-size:46px;text-align:center;margin-bottom:12px;}
+.modal-title{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;text-align:center;margin-bottom:8px;}
+.modal-desc{font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:22px;}
+
+/* FORM */
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.form-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:rgba(160,128,255,.5);}
+.form-input::placeholder{color:rgba(180,180,220,.3);}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a1030;border:1px solid rgba(140,100,255,.4);border-radius:14px;padding:14px 24px;font-size:14px;color:var(--text);z-index:999;transition:transform .3s ease,opacity .3s ease;opacity:0;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.success{border-color:rgba(80,200,120,.5);color:#90e8a0;}
+.toast.error{border-color:rgba(220,80,80,.5);color:#f09090;}
+
+/* SUBMIT BTN */
+.submit-row{display:flex;gap:10px;margin-top:6px;}
+.submit-btn{flex:1;padding:13px;border-radius:12px;border:none;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;background:linear-gradient(135deg,#6040c0,#4020a0);color:#e0d0ff;transition:all .2s;}
+.submit-btn:hover{transform:scale(1.02);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.cancel-btn{padding:13px 20px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;transition:all .2s;}
+.cancel-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text);}
+
+.webhook-hint{background:rgba(255,200,0,.07);border:1px solid rgba(255,200,0,.2);border-radius:10px;padding:12px 16px;font-size:12px;color:rgba(255,210,80,.7);margin-bottom:18px;line-height:1.6;}
+.webhook-hint strong{color:rgba(255,220,100,.9);}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">⚔ Official Bedwars Marketplace ⚔</div>
+    <h1 class="hero-title">Nico x JiWong</h1>
+    <p class="hero-sub">Premium accounts · Instant delivery · Trusted sellers</p>
+    <div class="hero-pills">
+      <div class="pill"><strong>500+</strong> Accounts Sold</div>
+      <div class="pill"><strong>4.9 ★</strong> Avg Rating</div>
+      <div class="pill"><strong>24h</strong> Fast Delivery</div>
+      <div class="pill"><strong>100%</strong> Legit</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">Choose Your Tier</span>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards" id="cards">
+
+    <div class="card card-lvl20" id="c-lvl20">
+      <div class="card-icon icon-lvl20">🛡️</div>
+      <div class="card-name c-purple">3 Stack LVL 20</div>
+      <div class="card-sub">Starter Tier</div>
+      <ul class="feats">
+        <li><span class="dot dot-p"></span>Level 20 Account</li>
+        <li><span class="dot dot-p"></span>3 Stack Confirmed</li>
+        <li><span class="dot dot-p"></span>Clean Account History</li>
+        <li><span class="dot dot-p"></span>Email Access Included</li>
+        <li><span class="dot dot-p"></span>Basic Cosmetics</li>
+      </ul>
+      <div class="price-lbl">Price</div>
+      <div class="price-num c-purple">80</div>
+      <div class="price-unit">Robux</div>
+      <div class="price-alt">&nbsp;</div>
+      <button class="btn btn-p" onclick="openModal('lvl20')">Purchase Now</button>
+    </div>
+
+    <div class="card card-gold" id="c-gold">
+      <div class="ribbon">Best Value</div>
+      <div class="card-icon icon-gold">🏆</div>
+      <div class="card-name c-gold">Gold Tier</div>
+      <div class="card-sub">Mid Tier</div>
+      <ul class="feats">
+        <li><span class="dot dot-g"></span>Gold Rank Account</li>
+        <li><span class="dot dot-g"></span>3 Stack Confirmed</li>
+        <li><span class="dot dot-g"></span>Clean Account History</li>
+        <li><span class="dot dot-g"></span>Email Access Included</li>
+        <li><span class="dot dot-g"></span>Gold Cosmetics &amp; Stats</li>
+        <li><span class="dot dot-g"></span>Priority Support</li>
+      </ul>
+      <div class="price-lbl">Price</div>
+      <div class="price-num c-gold">400</div>
+      <div class="price-unit">Robux</div>
+      <div class="price-alt">&nbsp;</div>
+      <button class="btn btn-g" onclick="openModal('gold')">Purchase Now</button>
+    </div>
+
+    <div class="card card-plat" id="c-plat">
+      <div class="card-icon icon-plat">💎</div>
+      <div class="card-name c-plat">Platinum Tier</div>
+      <div class="card-sub">Elite Tier</div>
+      <ul class="feats">
+        <li><span class="dot dot-pl"></span>Platinum Rank Account</li>
+        <li><span class="dot dot-pl"></span>3 Stack Confirmed</li>
+        <li><span class="dot dot-pl"></span>Clean Account History</li>
+        <li><span class="dot dot-pl"></span>Email Access Included</li>
+        <li><span class="dot dot-pl"></span>Rare Cosmetics &amp; High Stats</li>
+        <li><span class="dot dot-pl"></span>VIP Priority Support</li>
+        <li><span class="dot dot-pl"></span>Lifetime Replacement Warranty</li>
+      </ul>
+      <div class="price-lbl">Price</div>
+      <div class="price-num c-plat">1000</div>
+      <div class="price-unit">Robux</div>
+      <div class="price-alt">— or 2× Discord Nitro</div>
+      <button class="btn btn-pl" onclick="openModal('plat')">Purchase Now</button>
+    </div>
+
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="reviews-section">
+    <div class="section-title">★ Customer Reviews ★</div>
+    <div class="reviews">
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(100,60,200,.25);color:#a080ff;">ZK</div>
+          <div>
+            <div class="rev-name">ZeroKnight</div>
+            <div class="rev-tier">Gold Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"Got my Gold account within a few hours. Stats are clean, no flags, and the email was included just like they said. Nico sorted me out quickly, 10/10 will buy again."</div>
+      </div>
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(0,160,220,.2);color:#40d0ff;">xR</div>
+          <div>
+            <div class="rev-name">xRavenn</div>
+            <div class="rev-tier">Platinum Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"Plat account is INSANE. The cosmetics alone are worth it. JiWong responded in like 10 mins and delivered before I even finished dinner lol. Legit sellers fr."</div>
+      </div>
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(200,140,0,.2);color:#ffbe30;">BF</div>
+          <div>
+            <div class="rev-name">BlazeForge</div>
+            <div class="rev-tier">LVL 20 Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"Perfect starter acc for 80 robux. Was skeptical at first but Nico walked me through everything. Account was exactly as described. Highly recommend to anyone grinding."</div>
+      </div>
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(100,60,200,.25);color:#a080ff;">NV</div>
+          <div>
+            <div class="rev-name">NightVoid77</div>
+            <div class="rev-tier">Gold Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"Second time buying from these guys. Both times smooth as butter. Gold tier has really good WLR stats, came with a clean username too. JiWong is a real one."</div>
+      </div>
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(0,160,220,.2);color:#40d0ff;">SK</div>
+          <div>
+            <div class="rev-name">SkyKnight_</div>
+            <div class="rev-tier">Platinum Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"Used 2 Nitros for the Plat account. Replacement warranty already saved me once when I got into account issues — they replaced it no questions asked. This shop is the real deal."</div>
+      </div>
+
+      <div class="review">
+        <div class="rev-header">
+          <div class="rev-avatar" style="background:rgba(200,140,0,.2);color:#ffbe30;">CC</div>
+          <div>
+            <div class="rev-name">CrimsonClaw</div>
+            <div class="rev-tier">LVL 20 Tier</div>
+          </div>
+        </div>
+        <div class="rev-stars">★★★★★</div>
+        <div class="rev-text">"My friend told me about this shop and I'm so glad he did. LVL 20 acc was super clean, dm'd Nico and got it same day. Already planning to upgrade to Gold next paycheck 🔥"</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRUST BAR -->
+  <div class="trust">
+    <div class="trust-item"><i class="ti ti-shield-check" style="color:rgba(160,128,255,.7);font-size:17px;"></i> Verified Accounts</div>
+    <div class="trust-item"><i class="ti ti-bolt" style="color:rgba(160,128,255,.7);font-size:17px;"></i> Fast Delivery</div>
+    <div class="trust-item"><i class="ti ti-refresh" style="color:rgba(160,128,255,.7);font-size:17px;"></i> Replacements Available</div>
+    <div class="trust-item"><i class="ti ti-lock" style="color:rgba(160,128,255,.7);font-size:17px;"></i> Secure Transactions</div>
+    <div class="trust-item"><i class="ti ti-message-circle" style="color:rgba(160,128,255,.7);font-size:17px;"></i> 24/7 Support</div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="notice">
+    <div style="font-size:20px;flex-shrink:0;margin-top:2px;">💬</div>
+    <div class="notice-text">
+      <strong>How to buy:</strong> Click "Purchase Now" on your chosen tier, enter your Discord username, and submit. A notification will be sent to our team and we will DM you within 24 hours. Payment is made via Robux game pass link, or Discord Nitro gift for Platinum.
+    </div>
+  </div>
+
+  <footer>⚔ NICO x JIWONG BEDWARS SHOP · All sales final · DM for support</footer>
+
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-emoji" id="mEmoji"></div>
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-desc" id="mDesc"></div>
+
+    <div class="webhook-hint" id="webhookHint" style="display:none;">
+      ⚠ <strong>No webhook set.</strong> Open the HTML file in a text editor and paste your Discord webhook URL into the <code>WEBHOOK_URL</code> variable at the top of the &lt;script&gt; tag, then reload.
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="discordUser">Your Discord Username</label>
+      <input class="form-input" id="discordUser" type="text" placeholder="e.g. coolplayer123 or coolplayer#1234" autocomplete="off" />
+    </div>
+
+    <div class="submit-row">
+      <button class="submit-btn" id="submitBtn" onclick="submitOrder()">🛒 Send Order</button>
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   ▼ PASTE YOUR DISCORD WEBHOOK URL HERE ▼
+   ═══════════════════════════════════════════════════════════ */
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1513685092827009139/CGNxEIHe7cdzSvdLPsRw_U9BY-Ibe8HCIq27VNFgtuG2utf_ojSfXzyDmzNjdJ_mkB5a";
+/* ═══════════════════════════════════════════════════════════ */
+
+// Star background
+const sc = document.getElementById('stars');
+for (let i = 0; i < 90; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `left:${Math.random()*100}vw;top:${Math.random()*120}vh;width:${sz}px;height:${sz}px;animation-duration:${Math.random()*18+8}s;animation-delay:${Math.random()*16}s;opacity:${Math.random()*.7+.1}`;
+  sc.appendChild(s);
+}
+
+// Intersection observer for cards
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.card').forEach(c => obs.observe(c));
+
+// Tier data
+const tiers = {
+  lvl20: { emoji:'🛡️', name:'3 Stack LVL 20', price:'80 Robux', color:'#a080ff',
+    desc:'A clean level 20 starter account with 3 stack confirmed. Perfect for grinding your way up.' },
+  gold:  { emoji:'🏆', name:'Gold Tier',       price:'400 Robux', color:'#ffbe30',
+    desc:'Mid-tier Gold account with strong stats and cosmetics. A popular choice for serious players.' },
+  plat:  { emoji:'💎', name:'Platinum Tier',   price:'1,000 Robux or 2× Discord Nitro', color:'#40d0ff',
+    desc:'Top-tier Platinum with rare cosmetics, high stats, and lifetime replacement warranty.' }
+};
+
+let currentTier = null;
+
+function openModal(tier) {
+  currentTier = tier;
+  const t = tiers[tier];
+  document.getElementById('mEmoji').textContent = t.emoji;
+  document.getElementById('mTitle').style.color = t.color;
+  document.getElementById('mTitle').textContent = t.name;
+  document.getElementById('mDesc').innerHTML = `<strong style="color:${t.color}">${t.price}</strong><br><br>${t.desc}`;
+  document.getElementById('webhookHint').style.display =
+    (WEBHOOK_URL === 'YOUR_WEBHOOK_URL_HERE' || !WEBHOOK_URL) ? 'block' : 'none';
+  document.getElementById('discordUser').value = '';
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').textContent = '🛒 Send Order';
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+async function submitOrder() {
+  const user = document.getElementById('discordUser').value.trim();
+  if (!user) { showToast('Enter your Discord username first.', 'error'); return; }
+
+  if (!WEBHOOK_URL || WEBHOOK_URL === 'YOUR_WEBHOOK_URL_HERE') {
+    showToast('No webhook URL set — see the hint in the form.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const t = tiers[currentTier];
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'medium', timeStyle: 'short' });
+
+  const payload = {
+    username: "Nico x JiWong Shop",
+    avatar_url: "https://i.imgur.com/4M34hi2.png",
+    embeds: [{
+      title: "🛒 New Order Received!",
+      color: currentTier === 'lvl20' ? 0xa080ff : currentTier === 'gold' ? 0xffbe30 : 0x40d0ff,
+      fields: [
+        { name: "👤 Buyer Discord", value: `\`${user}\``, inline: true },
+        { name: "📦 Tier", value: `${t.emoji} **${t.name}**`, inline: true },
+        { name: "💰 Price", value: t.price, inline: true },
+        { name: "🕐 Time", value: timestamp, inline: false }
+      ],
+      footer: { text: "Nico x JiWong Bedwars Shop" },
+      thumbnail: { url: "https://i.imgur.com/4M34hi2.png" }
+    }]
+  };
+
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok || res.status === 204) {
+      showToast('✅ Order sent! We\'ll DM you on Discord soon.', 'success');
+      closeModal();
+    } else {
+      throw new Error('Webhook returned ' + res.status);
+    }
+  } catch (err) {
+    showToast('❌ Failed to send. Check your webhook URL.', 'error');
+    btn.disabled = false;
+    btn.textContent = '🛒 Send Order';
+  }
+}
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+</script>
+</body>
+</html>
